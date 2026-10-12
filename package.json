@@ -1,0 +1,27 @@
+{
+  "name": "demo-wdio-framework",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Lightweight demo WebdriverIO + TypeScript framework mirroring the SFS-Test-Automation architecture (POM, base page, util wrappers, allure reporting).",
+  "scripts": {
+    "wdio": "wdio run ./wdio.conf.ts",
+    "test": "wdio run ./wdio.conf.ts",
+    "test:login": "npx wdio run ./wdio.conf.ts --spec test/scenarios/login.test.ts",
+    "test:search": "npx wdio run ./wdio.conf.ts --spec test/scenarios/search.test.ts"
+  },
+  "devDependencies": {
+    "@types/node": "^22.13.5",
+    "@wdio/allure-reporter": "^8.32.2",
+    "@wdio/cli": "^8.32.2",
+    "@wdio/local-runner": "^8.32.2",
+    "@wdio/mocha-framework": "^8.32.2",
+    "@wdio/spec-reporter": "^8.32.2",
+    "chromedriver": "^150.0.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.3.3"
+  },
+  "dependencies": {
+    "allure-commandline": "^2.32.0",
+    "totp-generator": "^2.0.1"
+  }
+}
