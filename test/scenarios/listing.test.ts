@@ -3,12 +3,13 @@ import ListingPage from "../pageObjects/listing.page.ts";
 import testData from "../data/testData.ts";
 
 /**
- * These scenarios use intentionally dummy locators and are EXPECTED TO FAIL.
- * They demonstrate the Page Object Model structure without real selectors.
+ * Logs in, opens the Accounts list view, opens a record from it and verifies
+ * the record page. The record name in test/data/testData.ts must exist in
+ * the org.
  *
- * EXPECTED RESULT: FAIL (element not found - dummy locators)
+ * EXPECTED RESULT: PASS (when valid credentials are supplied)
  */
-describe("Listing Page: [LISTING, DUMMY_LOCATORS]", function () {
+describe("Listing Page: [LISTING, SMOKE]", function () {
   before(async function () {
     await LoginPage.open();
     try {
@@ -18,18 +19,22 @@ describe("Listing Page: [LISTING, DUMMY_LOCATORS]", function () {
     }
   });
 
-  it("should display the listing title", async function () {
-    await ListingPage.open(testData.listing.id);
-    await expect(ListingPage.listingTitle).toBeDisplayed();
+  it("should display the record in the list view", async function () {
+    await ListingPage.open(testData.listing.objectApiName);
+    await expect(
+      ListingPage.getRecordLinkInList(testData.listing.itemName),
+    ).toBeDisplayed();
   });
 
-  it("should add the listing to cart", async function () {
-    await ListingPage.addToCart();
-    await expect(ListingPage.addToCartButton).not.toBeDisplayed();
+  it("should open the record from the list view", async function () {
+    await ListingPage.openRecord(testData.listing.itemName);
+    await expect(ListingPage.recordEntityLabel).toHaveText(
+      testData.listing.objectLabel,
+    );
   });
 
-  it("should display the listing price", async function () {
-    const price = await ListingPage.getPrice();
-    expect(price).not.toBe("");
+  it("should display the record title", async function () {
+    const title = await ListingPage.getRecordTitle();
+    expect(title).toBe(testData.listing.itemName);
   });
 });

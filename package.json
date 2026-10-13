@@ -7,7 +7,9 @@
     "wdio": "wdio run ./wdio.conf.ts",
     "test": "wdio run ./wdio.conf.ts",
     "test:login": "npx wdio run ./wdio.conf.ts --spec test/scenarios/login.test.ts",
-    "test:search": "npx wdio run ./wdio.conf.ts --spec test/scenarios/search.test.ts"
+    "test:search": "npx wdio run ./wdio.conf.ts --spec test/scenarios/search.test.ts",
+    "test:listing": "npx wdio run ./wdio.conf.ts --spec test/scenarios/listing.test.ts",
+    "test:home": "npx wdio run ./wdio.conf.ts --spec test/scenarios/home.test.ts"
   },
   "devDependencies": {
     "@types/node": "^22.13.5",

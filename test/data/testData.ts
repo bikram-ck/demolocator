@@ -4,10 +4,11 @@
  */
 export default {
   search: {
-    keyword: "Dummy Search Term",
+    keyword: "Acme",
   },
   listing: {
-    id: "dummy-listing-id-001",
-    itemName: "Sample Demo Listing",
+    objectApiName: "Account",
+    objectLabel: "Account",
+    itemName: "Acme",
   },
 };

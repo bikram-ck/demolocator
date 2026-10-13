@@ -2,12 +2,12 @@ import LoginPage from "../pageObjects/login.page.ts";
 import HomePage from "../pageObjects/home.page.ts";
 
 /**
- * These scenarios use intentionally dummy locators and are EXPECTED TO FAIL.
- * They demonstrate the Page Object Model structure without real selectors.
+ * Logs in and verifies the Salesforce Lightning Home page loads and the
+ * global header notifications button works.
  *
- * EXPECTED RESULT: FAIL (element not found - dummy locators)
+ * EXPECTED RESULT: PASS (when valid credentials are supplied)
  */
-describe("Home Page: [HOME, DUMMY_LOCATORS]", function () {
+describe("Home Page: [HOME, SMOKE]", function () {
   before(async function () {
     await LoginPage.open();
     try {
@@ -17,13 +17,13 @@ describe("Home Page: [HOME, DUMMY_LOCATORS]", function () {
     }
   });
 
-  it("should display the welcome banner", async function () {
+  it("should display the Recent Records card", async function () {
     await HomePage.open();
-    await expect(HomePage.welcomeBanner).toBeDisplayed();
+    await expect(HomePage.recentRecordsCard).toBeDisplayed();
   });
 
   it("should open notifications from the home page", async function () {
     await HomePage.openNotifications();
-    await expect(HomePage.notificationIcon).toBeDisplayed();
+    await expect(HomePage.notificationsPanelHeader).toBeDisplayed();
   });
 });

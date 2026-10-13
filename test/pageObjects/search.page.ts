@@ -1,27 +1,32 @@
 import Page from "./page.ts";
 
 /**
- * DUMMY page object - every locator below is intentionally incorrect so
- * these tests fail to find elements. Only the structure/style mirrors the
- * original framework's page objects.
+ * Salesforce Lightning global search (header search bar -> Search Results page).
  */
 class SearchPage extends Page {
   /**
    * Define selectors using getter methods
    */
-  public get searchInput(): ChainablePromiseElement {
-    return $('//input[@id="dummy-search-box-1"]');
+  public get globalSearchButton(): ChainablePromiseElement {
+    return $('//button[contains(@class, "search-button") and starts-with(@aria-label, "Search")]');
   }
-  public get searchButton(): ChainablePromiseElement {
-    return $('[data-test="fake-search-submit"]');
+  // The search input lives inside a shadow root, so XPath cannot reach it -
+  // the ">>>" deep selector pierces shadow DOM.
+  public get searchInput(): ChainablePromiseElement {
+    return $('>>>input[type="search"][placeholder="Search..."]');
+  }
+  public get searchResultsHeader(): ChainablePromiseElement {
+    return $('//h1[normalize-space() = "Search Results"]');
   }
   public get firstResult(): ChainablePromiseElement {
-    return $('//ul[@id="dummy-results-list"]/li[1]');
+    return $(
+      '(//table[contains(@class, "forceRecordLayout")]//th//a[@data-refid="recordId"])[1]',
+    );
   }
 
   public getResultByName(resultName: string): ChainablePromiseElement {
     return $(
-      `//li[contains(@class, "dummy-result-item")][text()="${resultName}"]`,
+      `//table[contains(@class, "forceRecordLayout")]//th//a[@data-refid="recordId"][normalize-space() = "${resultName}"]`,
     );
   }
 
@@ -30,18 +35,19 @@ class SearchPage extends Page {
    */
 
   /**
-   * Opens the Search Page of the demo app
+   * Opens the global search dialog from the Lightning header
    */
   public async open(): Promise<void> {
-    await super.open("/lightning/page/search");
+    await this.click(this.globalSearchButton);
   }
 
   /**
-   * Searches for the given keyword
+   * Searches for the given keyword and waits for the Search Results page
    */
   public async searchFor(keyword: string): Promise<void> {
     await this.setValue(this.searchInput, keyword);
-    await this.click(this.searchButton);
+    await browser.keys("Enter");
+    await this.waitForVisible(this.searchResultsHeader, 20000);
   }
 
   /**

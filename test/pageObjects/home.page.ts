@@ -1,24 +1,31 @@
 import Page from "./page.ts";
 
 /**
- * DUMMY page object - every locator below is intentionally incorrect so
- * these tests fail to find elements. Only the structure/style mirrors the
- * original framework's home.page.ts.
+ * Salesforce Lightning Home page (Loan Servicing app).
  */
 class HomePage extends Page {
   /**
    * Define selectors using getter methods
    */
-  public get welcomeBanner(): ChainablePromiseElement {
-    return $('//div[@id="dummy-welcome-banner-1"]');
+  public get recentRecordsCard(): ChainablePromiseElement {
+    return $(
+      '//h2[contains(@class, "header-title-container")][normalize-space() = "Recent Records"]',
+    );
   }
+  // The button text includes the unread counter (e.g. "0Notifications"), so
+  // match on the counter container rather than exact text.
   public get notificationIcon(): ChainablePromiseElement {
-    return $('[data-test="fake-notification-icon"]');
+    return $('//div[contains(@class, "unsNotificationsCounter")]//button');
+  }
+  public get notificationsPanelHeader(): ChainablePromiseElement {
+    return $(
+      '//div[contains(@class, "unsNotificationsPanel")]//h2[contains(@class, "titleName")][normalize-space() = "Notifications"]',
+    );
   }
 
-  public getPendingTaskButton(taskIndex: number): ChainablePromiseElement {
+  public getHomeCardHeader(cardTitle: string): ChainablePromiseElement {
     return $(
-      `(//button[contains(@class, "dummy-pending-task")])[${taskIndex}]`,
+      `//h2[contains(@class, "header-title-container")][normalize-space() = "${cardTitle}"]`,
     );
   }
 
@@ -27,24 +34,26 @@ class HomePage extends Page {
    */
 
   /**
-   * Opens the Home Page of the demo app
+   * Opens the Lightning Home page on the current (logged-in) domain, since
+   * baseUrl points at the login domain and only applies before login.
    */
   public async open(): Promise<void> {
-    await super.open("/lightning/page/home");
+    const origin = new URL(await browser.getUrl()).origin;
+    await browser.url(`${origin}/lightning/page/home`);
   }
 
   /**
-   * Clicks the notification icon on the home page
+   * Clicks the notifications bell in the global header
    */
   public async openNotifications(): Promise<void> {
     await this.click(this.notificationIcon);
   }
 
   /**
-   * Reads the welcome banner text on the home page
+   * Reads the "Recent Records" card header text on the home page
    */
-  public async getWelcomeBannerText(): Promise<string> {
-    return this.getText(this.welcomeBanner);
+  public async getRecentRecordsCardText(): Promise<string> {
+    return this.getText(this.recentRecordsCard);
   }
 }
 

@@ -1,22 +1,22 @@
 import Page from "./page.ts";
 
 /**
- * DUMMY page object - every locator below is intentionally incorrect so
- * these tests fail to find elements. Only the structure/style mirrors the
- * original framework's page objects.
+ * Salesforce Lightning object list view (e.g. Accounts) and the record page
+ * opened from it.
  */
 class ListingPage extends Page {
   /**
    * Define selectors using getter methods
    */
-  public get listingTitle(): ChainablePromiseElement {
-    return $('//h1[@id="dummy-listing-title"]');
+  public get recordTitle(): ChainablePromiseElement {
+    return $('//lightning-formatted-text[@slot="primaryField"]');
   }
-  public get addToCartButton(): ChainablePromiseElement {
-    return $('[data-test="fake-add-to-cart"]');
+  public get recordEntityLabel(): ChainablePromiseElement {
+    return $("//records-entity-label");
   }
-  public get priceLabel(): ChainablePromiseElement {
-    return $('//span[@class="dummy-price-label"]');
+
+  public getRecordLinkInList(recordName: string): ChainablePromiseElement {
+    return $(`//table//th//a[@title="${recordName}"]`);
   }
 
   /**
@@ -24,24 +24,30 @@ class ListingPage extends Page {
    */
 
   /**
-   * Opens a specific listing details page by id
+   * Opens the "All" list view of the given object (e.g. "Account").
+   * Uses the current Lightning domain, since baseUrl points at the login
+   * domain and only applies before login.
    */
-  public async open(listingId: string): Promise<void> {
-    await super.open(`/lightning/r/Listing/${listingId}/view`);
+  public async open(objectApiName: string): Promise<void> {
+    const origin = new URL(await browser.getUrl()).origin;
+    await browser.url(
+      `${origin}/lightning/o/${objectApiName}/list?filterName=All${objectApiName}s`,
+    );
   }
 
   /**
-   * Adds the current listing to the cart
+   * Opens a record from the list view by its name
    */
-  public async addToCart(): Promise<void> {
-    await this.click(this.addToCartButton);
+  public async openRecord(recordName: string): Promise<void> {
+    await this.click(this.getRecordLinkInList(recordName));
+    await this.waitForVisible(this.recordTitle, 20000);
   }
 
   /**
-   * Returns the displayed price of the listing
+   * Returns the record name shown in the record page header
    */
-  public async getPrice(): Promise<string> {
-    return this.getText(this.priceLabel);
+  public async getRecordTitle(): Promise<string> {
+    return this.getText(this.recordTitle);
   }
 }
 

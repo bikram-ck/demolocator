@@ -3,12 +3,13 @@ import SearchPage from "../pageObjects/search.page.ts";
 import testData from "../data/testData.ts";
 
 /**
- * These scenarios use intentionally dummy locators and are EXPECTED TO FAIL.
- * They demonstrate the Page Object Model structure without real selectors.
+ * Logs in and runs a Salesforce Lightning global search, then verifies the
+ * Search Results page lists a matching record. The keyword in
+ * test/data/testData.ts must match an existing record in the org.
  *
- * EXPECTED RESULT: FAIL (element not found - dummy locators)
+ * EXPECTED RESULT: PASS (when valid credentials are supplied)
  */
-describe("Search Page: [SEARCH, DUMMY_LOCATORS]", function () {
+describe("Search Page: [SEARCH, SMOKE]", function () {
   before(async function () {
     await LoginPage.open();
     try {
