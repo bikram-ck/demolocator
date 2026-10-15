@@ -11,4 +11,10 @@ export default {
     objectLabel: "Account",
     itemName: "Acme",
   },
+  loanServicing: {
+    appName: "Loan Servicing",
+    tabName: "CL Contracts",
+    // Add more { number, id } entries to open more contracts.
+    contracts: [{ number: "LAI-00000000", id: "aKEgK00000dJpF8WAK" }],
+  },
 };

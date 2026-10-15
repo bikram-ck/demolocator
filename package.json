@@ -9,7 +9,10 @@
     "test:login": "npx wdio run ./wdio.conf.ts --spec test/scenarios/login.test.ts",
     "test:search": "npx wdio run ./wdio.conf.ts --spec test/scenarios/search.test.ts",
     "test:listing": "npx wdio run ./wdio.conf.ts --spec test/scenarios/listing.test.ts",
-    "test:home": "npx wdio run ./wdio.conf.ts --spec test/scenarios/home.test.ts"
+    "test:home": "npx wdio run ./wdio.conf.ts --spec test/scenarios/home.test.ts",
+    "test:loanServicing": "npx wdio run ./wdio.conf.ts --spec test/scenarios/loanServicing.test.ts",
+    "test:clContractLocators": "npx wdio run ./wdio.conf.ts --spec test/scenarios/clContractDetail.locators.test.ts",
+    "fix:chromedriver": "node scripts/fix-chromedriver.mjs"
   },
   "devDependencies": {
     "@types/node": "^22.13.5",
